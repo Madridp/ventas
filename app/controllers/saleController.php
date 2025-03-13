@@ -871,7 +871,7 @@
             unset($_SESSION['datos_cliente_venta']);
             unset($_SESSION['datos_producto_venta']);
 
-            $_SESSION['venta_codigo_factura']=$codigo_venta;
+            $_SESSION['venta_codigo_factura']=$codigo_venta;  // Variable se mantiene por compatibilidad del sistema
 
             $alerta=[
 				"tipo"=>"recargar",
@@ -953,8 +953,7 @@
 							<td>'.$this->limitarCadena($rows['usuario_nombre'].' '.$rows['usuario_apellido'],30,"...").'</td>
 							<td>'.MONEDA_SIMBOLO.number_format($rows['venta_total'],MONEDA_DECIMALES,MONEDA_SEPARADOR_DECIMAL,MONEDA_SEPARADOR_MILLAR).' '.MONEDA_NOMBRE.'</td>
 			                <td>
-
-			                	<button type="button" class="button is-link is-outlined is-rounded is-small btn-sale-options" onclick="print_invoice(\''.APP_URL.'app/pdf/invoice.php?code='.$rows['venta_codigo'].'\')" title="Imprimir factura Nro. '.$rows['venta_id'].'" >
+			                	<button type="button" class="button is-link is-outlined is-rounded is-small btn-sale-options" onclick="print_invoice(\''.APP_URL.'app/pdf/invoice.php?code='.$rows['venta_codigo'].'\')" title="Imprimir Recibo de Venta Nro. '.$rows['venta_id'].'" >
 	                                <i class="fas fa-file-invoice-dollar fa-fw"></i>
 	                            </button>
 
@@ -964,19 +963,20 @@
 
 			                    <a href="'.APP_URL.'saleDetail/'.$rows['venta_codigo'].'/" class="button is-link is-rounded is-small" title="Informacion de venta Nro. '.$rows['venta_id'].'" >
 			                    	<i class="fas fa-shopping-bag fa-fw"></i>
-			                    </a>
+			                    </a>';
+                    
+                    if($_SESSION['cargo']=="Administrador"){
+                        $tabla.='
+                            <form class="FormularioAjax is-inline-block" action="'.APP_URL.'app/ajax/ventaAjax.php" method="POST" autocomplete="off" >
+                                <input type="hidden" name="modulo_venta" value="eliminar_venta">
+                                <input type="hidden" name="venta_id" value="'.$rows['venta_id'].'">
+                                <button type="submit" class="button is-danger is-rounded is-small" title="Eliminar venta Nro. '.$rows['venta_id'].'" >
+                                    <i class="far fa-trash-alt fa-fw"></i>
+                                </button>
+                            </form>';
+                    }
 
-			                	<form class="FormularioAjax is-inline-block" action="'.APP_URL.'app/ajax/ventaAjax.php" method="POST" autocomplete="off" >
-
-			                		<input type="hidden" name="modulo_venta" value="eliminar_venta">
-			                		<input type="hidden" name="venta_id" value="'.$rows['venta_id'].'">
-
-			                    	<button type="submit" class="button is-danger is-rounded is-small" title="Eliminar venta Nro. '.$rows['venta_id'].'" >
-			                    		<i class="far fa-trash-alt fa-fw"></i>
-			                    	</button>
-			                    </form>
-
-			                </td>
+                    $tabla.='</td>
 						</tr>
 					';
 					$contador++;

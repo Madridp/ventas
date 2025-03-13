@@ -1,6 +1,6 @@
 <?php
 
-	const APP_URL="http://localhost/sistemas/ventas/";
+	const APP_URL="http://localhost/";
 	const APP_NAME="VENTAS";
 	const APP_SESSION_NAME="POS";
 
