@@ -59,7 +59,9 @@
 				  	<select name="usuario_cargo">
 				    	<option value="" selected="" >Seleccione una opción</option>
                         <option value="Administrador">Administrador</option>
+						<option value="Encargado">Encargado</option>
                         <option value="Cajero">Cajero</option>
+						
 				  	</select>
 				</div>
 		  	</div>
