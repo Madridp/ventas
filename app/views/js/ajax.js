@@ -34,9 +34,33 @@ formularios_ajax.forEach(formularios => {
                 };
 
                 fetch(action,config)
-                .then(respuesta => respuesta.json())
+                .then(respuesta => {
+                    // Intentar parsear como JSON, si falla, mostrar un error genérico
+                    return respuesta.text().then(text => {
+                        try {
+                            return JSON.parse(text);
+                        } catch (error) {
+                            console.error("Error al parsear JSON:", text);
+                            return {
+                                tipo: "simple",
+                                titulo: "Error en el sistema",
+                                texto: "Ha ocurrido un error al procesar la respuesta del servidor",
+                                icono: "error"
+                            };
+                        }
+                    });
+                })
                 .then(respuesta =>{ 
                     return alertas_ajax(respuesta);
+                })
+                .catch(error => {
+                    console.error("Error en la petición:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en el sistema',
+                        text: 'Ha ocurrido un error al procesar la solicitud',
+                        confirmButtonText: 'Aceptar'
+                    });
                 });
             }
         });
@@ -44,51 +68,6 @@ formularios_ajax.forEach(formularios => {
     });
 
 });
-
-
-
-function alertas_ajax(alerta){
-    if(alerta.tipo=="simple"){
-
-        Swal.fire({
-            icon: alerta.icono,
-            title: alerta.titulo,
-            text: alerta.texto,
-            confirmButtonText: 'Aceptar'
-        });
-
-    }else if(alerta.tipo=="recargar"){
-
-        Swal.fire({
-            icon: alerta.icono,
-            title: alerta.titulo,
-            text: alerta.texto,
-            confirmButtonText: 'Aceptar'
-        }).then((result) => {
-            if(result.isConfirmed){
-                location.reload();
-            }
-        });
-
-    }else if(alerta.tipo=="limpiar"){
-
-        Swal.fire({
-            icon: alerta.icono,
-            title: alerta.titulo,
-            text: alerta.texto,
-            confirmButtonText: 'Aceptar'
-        }).then((result) => {
-            if(result.isConfirmed){
-                document.querySelector(".FormularioAjax").reset();
-            }
-        });
-
-    }else if(alerta.tipo=="redireccionar"){
-        window.location.href=alerta.url;
-    }
-}
-
-
 
 /* Boton cerrar sesion */
 let btn_exit=document.querySelectorAll(".btn-exit");
@@ -116,3 +95,42 @@ btn_exit.forEach(exitSystem => {
 
     });
 });
+
+function alertas_ajax(alerta){
+    if(alerta.tipo=="simple"){
+        Swal.fire({
+            icon: alerta.icono,
+            title: alerta.titulo,
+            text: alerta.texto,
+            confirmButtonText: 'Aceptar'
+        });
+    }else if(alerta.tipo=="recargar"){
+        Swal.fire({
+            icon: alerta.icono,
+            title: alerta.titulo,
+            text: alerta.texto,
+            confirmButtonText: 'Aceptar'
+        }).then((result) => {
+            if(result.isConfirmed){
+                if(alerta.url){
+                    window.location.href = alerta.url;
+                } else {
+                    location.reload();
+                }
+            }
+        });
+    }else if(alerta.tipo=="limpiar"){
+        Swal.fire({
+            icon: alerta.icono,
+            title: alerta.titulo,
+            text: alerta.texto,
+            confirmButtonText: 'Aceptar'
+        }).then((result) => {
+            if(result.isConfirmed){
+                document.querySelector(".FormularioAjax").reset();
+            }
+        });
+    }else if(alerta.tipo=="redireccionar"){
+        window.location.href=alerta.url;
+    }
+}

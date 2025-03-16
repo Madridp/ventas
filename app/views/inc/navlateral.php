@@ -37,6 +37,19 @@
 					</a>
 				</li>
 
+				<li class="full-width divider-menu-h"></li>
+
+				<li class="full-width">
+					<a href="<?php echo APP_URL; ?>gastos/" class="full-width">
+						<div class="navLateral-body-cl">
+							<i class="fas fa-file-invoice-dollar fa-fw"></i>
+						</div>
+						<div class="navLateral-body-cr">
+							Gastos
+						</div>
+					</a>
+				</li>
+
 				<?php if($_SESSION['cargo']=="Administrador"){ ?>
 				<li class="full-width divider-menu-h"></li>
 
@@ -324,6 +337,18 @@
 								</div>
 							</a>
 						</li>
+						<?php if($_SESSION['cargo'] != "Cajero" && $_SESSION['cargo'] != "Cajera"): ?>
+						<li class="full-width">
+							<a href="<?php echo APP_URL; ?>venta-view/" class="full-width">
+								<div class="navLateral-body-cl">
+									<i class="fas fa-shopping-cart fa-fw"></i>
+								</div>
+								<div class="navLateral-body-cr">
+									Información de Venta
+								</div>
+							</a>
+						</li>
+						<?php endif; ?>
 					</ul>
 				</li>
 

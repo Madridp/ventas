@@ -89,7 +89,7 @@
 		/*----------  Seleccionando datos de productos  ----------*/
         $campos_productos="producto_codigo,producto_nombre,producto_stock_total,producto_precio_venta,producto_tipo_unidad";
 
-        $check_producto=$ins_producto->seleccionarDatos("Normal","producto WHERE (producto_estado = 'Habilitado' AND producto_stock_total >= 1) ORDER BY $orden",$campos_productos,0);
+        $check_producto=$ins_producto->seleccionarDatos("Normal","producto WHERE (producto_estado = 'Habilitado' AND producto_stock_total >= 0) ORDER BY $orden",$campos_productos,0);
 
         if($check_producto->rowCount()>=1){
             $datos_productos=$check_producto->fetchAll();
