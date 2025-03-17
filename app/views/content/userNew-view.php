@@ -42,13 +42,13 @@
 		  	<div class="column">
 		    	<div class="control">
 					<label>Clave <?php echo CAMPO_OBLIGATORIO; ?></label>
-				  	<input class="input" type="password" name="usuario_clave_1" pattern="[a-zA-Z0-9\\$@.\-]{7,100}" maxlength="100" required >
+				  	<input class="input" type="password" name="usuario_clave_1" pattern="[a-zA-Z0-9\$@.-]{7,100}" maxlength="100" required >
 				</div>
 		  	</div>
 		  	<div class="column">
 		    	<div class="control">
 					<label>Repetir clave <?php echo CAMPO_OBLIGATORIO; ?></label>
-				  	<input class="input" type="password" name="usuario_clave_2" pattern="[a-zA-Z0-9\\$@.\-]{7,100}" maxlength="100" required >
+				  	<input class="input" type="password" name="usuario_clave_2" pattern="[a-zA-Z0-9\$@.-]{7,100}" maxlength="100" required >
 				</div>
 		  	</div>
 		</div>
@@ -59,9 +59,7 @@
 				  	<select name="usuario_cargo">
 				    	<option value="" selected="" >Seleccione una opción</option>
                         <option value="Administrador">Administrador</option>
-						<option value="Encargado">Encargado</option>
                         <option value="Cajero">Cajero</option>
-						
 				  	</select>
 				</div>
 		  	</div>

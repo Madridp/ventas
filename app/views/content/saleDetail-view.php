@@ -1,30 +1,4 @@
 <div class="container is-fluid mb-6">
-<?php
-	if (!isset($_SESSION['usuario_cargo'])) {
-		echo '<article class="message is-danger mt-6 mb-6">
-			<div class="message-header">
-				<p>Acceso denegado</p>
-			</div>
-			<div class="message-body">
-				No tienes permisos para acceder a esta sección.
-			</div>
-		</article>';
-		exit;
-	}
-
-	if($_SESSION['usuario_cargo']!="Administrador" && $_SESSION['usuario_cargo']!="Encargado" && $_SESSION['usuario_cargo']!="Encargada"){
-		echo '<article class="message is-danger mt-6 mb-6">
-			<div class="message-header">
-				<p>Acceso denegado</p>
-			</div>
-			<div class="message-body has-text-centered">
-				<i class="fas fa-exclamation-triangle fa-2x"></i><br>
-				No tienes los permisos necesarios para acceder a esta información.
-			</div>
-		</article>';
-		exit();
-	}
-?>
 	<h1 class="title">Ventas</h1>
 	<h2 class="subtitle"><i class="fas fa-shopping-bag fa-fw"></i> &nbsp; Información de venta</h2>
 </div>

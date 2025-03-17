@@ -52,58 +52,44 @@
                 </div>
             </div>
             <div id="gastos-list">
-                <div class="cards">
+                <div class="cards columns is-multiline">
                 <?php if(empty($gastos_array)): ?>
-                    <article class="message is-warning">
-                        <div class="message-header">
-                            <p>No hay gastos registrados</p>
-                        </div>
-                        <div class="message-body has-text-centered">
-                            <i class="fas fa-exclamation-triangle fa-2x mb-3"></i><br>
-                            No se han registrado gastos hasta el momento.
-                        </div>
-                    </article>
+                    <div class="column is-12">
+                        <article class="message is-warning">
+                            <div class="message-header">
+                                <p>No hay gastos registrados</p>
+                            </div>
+                            <div class="message-body has-text-centered">
+                                <i class="fas fa-exclamation-triangle fa-2x mb-3"></i><br>
+                                No se han registrado gastos hasta el momento.
+                            </div>
+                        </article>
+                    </div>
                 <?php else: ?>
                     <?php foreach($gastos_array as $gasto): ?>
-                        <div class="card mb-3 gasto-card">
-                            <div class="card-content">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <span class="icon is-large">
-                                            <i class="fas fa-file-invoice-dollar fa-2x"></i>
+                        <div class="column is-4">
+                            <div class="card mb-3 gasto-card">
+                                <div class="card-content">
+                                    <p class="title is-4"><?php echo $gasto['razon']; ?></p>
+                                    <div class="badges-container">
+                                        <span class="badge is-money">
+                                            <span class="icon">
+                                                <i class="fas fa-money-bill-wave"></i>
+                                            </span>
+                                            <span>Q<?php echo number_format($gasto['monto'], 2); ?></span>
                                         </span>
-                                    </div>
-                                    <div class="media-content">
-                                        <p class="title is-4"><?php echo $gasto['razon']; ?></p>
-                                        <p class="subtitle is-6">
-                                            <span class="icon-text">
-                                                <span class="icon">
-                                                    <i class="fas fa-money-bill-wave"></i>
-                                                </span>
-                                                <span>Monto: Q<?php echo number_format($gasto['monto'], 2); ?></span>
+                                        <span class="badge is-date">
+                                            <span class="icon">
+                                                <i class="fas fa-calendar"></i>
                                             </span>
-                                            <br>
-                                            <span class="icon-text">
-                                                <span class="icon">
-                                                    <i class="fas fa-box"></i>
-                                                </span>
-                                                <span>Fondo: <?php echo $gasto['fondo']; ?></span>
+                                            <span><?php echo date('d \d\e M Y', strtotime($gasto['fecha'])); ?></span>
+                                        </span>
+                                        <span class="badge is-caja">
+                                            <span class="icon">
+                                                <i class="fas fa-cash-register"></i>
                                             </span>
-                                            <br>
-                                            <span class="icon-text">
-                                                <span class="icon">
-                                                    <i class="fas fa-calendar"></i>
-                                                </span>
-                                                <span><?php echo date('d \d\e F \d\e Y, H:i', strtotime($gasto['fecha'])); ?></span>
-                                            </span>
-                                            <br>
-                                            <span class="icon-text">
-                                                <span class="icon">
-                                                    <i class="fas fa-cash-register"></i>
-                                                </span>
-                                                <span>Caja: <?php echo $gasto['caja_nombre']; ?></span>
-                                            </span>
-                                        </p>
+                                            <span>Caja <?php echo $gasto['caja_id']; ?></span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -224,13 +210,39 @@
                     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
                     background-color: #00c4a7;
                 }
+                .badge {
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 0.5rem;
+                    border-radius: 6px;
+                    font-size: 0.9rem;
+                    margin: 0.2rem;
+                    color: white;
+                }
+                .badge.is-money {
+                    background-color: #00d1b2;
+                }
+                .badge.is-date {
+                    background-color: #3273dc;
+                }
+                .badge.is-caja {
+                    background-color: #ff3860;
+                }
+                .badge .icon {
+                    margin-right: 0.3rem;
+                }
                 .gasto-card {
                     transition: all 0.3s ease;
-                    border-radius: 8px;
                 }
                 .gasto-card:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                    transform: translateY(-5px);
+                    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+                }
+                .badges-container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.5rem;
+                    margin-top: 1rem;
                 }
                 .icon-text {
                     display: inline-flex;
@@ -257,82 +269,69 @@
     let todosLosGastos = <?php echo json_encode($gastos_array); ?>;
     const APP_URL = document.querySelector('meta[name="app-url"]').content;
 
-    // Función para formatear la fecha
+    // Función para formatear fecha en español
     function formatearFecha(fecha) {
-        return new Date(fecha).toLocaleDateString('es-GT', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+        const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        const date = new Date(fecha);
+        const dia = date.getDate();
+        const mes = meses[date.getMonth()];
+        const año = date.getFullYear();
+        return `${dia} de ${mes} ${año}`;
     }
 
-    // Función para renderizar los gastos
+    // Función para renderizar gastos
     function renderizarGastos(gastos) {
         const gastosList = document.querySelector('#gastos-list .cards');
+        let html = '';
         
         if(gastos.length === 0) {
             gastosList.innerHTML = `
-                <article class="message is-warning">
-                    <div class="message-header">
-                        <p>No hay gastos registrados</p>
-                    </div>
-                    <div class="message-body has-text-centered">
-                        <i class="fas fa-exclamation-triangle fa-2x mb-3"></i><br>
-                        No se han registrado gastos hasta el momento.
-                    </div>
-                </article>`;
+                <div class="column is-12">
+                    <article class="message is-warning">
+                        <div class="message-header">
+                            <p>No hay gastos registrados</p>
+                        </div>
+                        <div class="message-body has-text-centered">
+                            <i class="fas fa-exclamation-triangle fa-2x mb-3"></i><br>
+                            No se han registrado gastos hasta el momento.
+                        </div>
+                    </article>
+                </div>`;
             return;
         }
 
-        let html = '';
+        // Generar HTML para cada gasto
         gastos.forEach(gasto => {
             html += `
-                <div class="card mb-3 gasto-card">
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-left">
-                                <span class="icon is-large">
-                                    <i class="fas fa-file-invoice-dollar fa-2x"></i>
+                <div class="column is-4">
+                    <div class="card mb-3 gasto-card">
+                        <div class="card-content">
+                            <p class="title is-4">${gasto.razon}</p>
+                            <div class="badges-container">
+                                <span class="badge is-money">
+                                    <span class="icon">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                    </span>
+                                    <span>Q${parseFloat(gasto.monto).toFixed(2)}</span>
                                 </span>
-                            </div>
-                            <div class="media-content">
-                                <p class="title is-4">${gasto.razon}</p>
-                                <p class="subtitle is-6">
-                                    <span class="icon-text">
-                                        <span class="icon">
-                                            <i class="fas fa-money-bill-wave"></i>
-                                        </span>
-                                        <span>Monto: Q${parseFloat(gasto.monto).toFixed(2)}</span>
+                                <span class="badge is-date">
+                                    <span class="icon">
+                                        <i class="fas fa-calendar"></i>
                                     </span>
-                                    <br>
-                                    <span class="icon-text">
-                                        <span class="icon">
-                                            <i class="fas fa-box"></i>
-                                        </span>
-                                        <span>Fondo: ${gasto.fondo}</span>
+                                    <span>${formatearFecha(gasto.fecha)}</span>
+                                </span>
+                                <span class="badge is-caja">
+                                    <span class="icon">
+                                        <i class="fas fa-cash-register"></i>
                                     </span>
-                                    <br>
-                                    <span class="icon-text">
-                                        <span class="icon">
-                                            <i class="fas fa-calendar"></i>
-                                        </span>
-                                        <span>${formatearFecha(gasto.fecha)}</span>
-                                    </span>
-                                    <br>
-                                    <span class="icon-text">
-                                        <span class="icon">
-                                            <i class="fas fa-cash-register"></i>
-                                        </span>
-                                        <span>Caja: ${gasto.caja_nombre}</span>
-                                    </span>
-                                </p>
+                                    <span>Caja ${gasto.caja_id}</span>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>`;
         });
+        
         gastosList.innerHTML = html;
     }
 

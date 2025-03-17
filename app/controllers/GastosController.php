@@ -147,5 +147,52 @@ class GastosController extends mainModel {
             return json_encode($alerta);
         }
     }
+
+    /*----------  Controlador eliminar gasto  ----------*/
+    public function eliminarGastoControlador(){
+        if(isset($_POST['id'])){
+            $id=$this->limpiarCadena($_POST['id']);
+            
+            // Verificando que el gasto exista
+            $check_gasto=$this->ejecutarConsulta("SELECT id FROM gastos WHERE id='$id'");
+            if($check_gasto->rowCount()<=0){
+                $alerta=[
+                    "tipo"=>"simple",
+                    "titulo"=>"Ocurrió un error inesperado",
+                    "texto"=>"El gasto no existe en el sistema",
+                    "icono"=>"error"
+                ];
+                return json_encode($alerta);
+            }
+            
+            // Eliminando el gasto
+            $eliminar_gasto=$this->ejecutarConsulta("DELETE FROM gastos WHERE id='$id'");
+            if($eliminar_gasto->rowCount()>=1){
+                $alerta=[
+                    "tipo"=>"limpiar",
+                    "titulo"=>"Gasto eliminado",
+                    "texto"=>"El gasto ha sido eliminado con éxito",
+                    "icono"=>"success"
+                ];
+            }else{
+                $alerta=[
+                    "tipo"=>"simple",
+                    "titulo"=>"Ocurrió un error inesperado",
+                    "texto"=>"No se pudo eliminar el gasto, por favor intente nuevamente",
+                    "icono"=>"error"
+                ];
+            }
+            
+            return json_encode($alerta);
+        }
+        
+        $alerta=[
+            "tipo"=>"simple",
+            "titulo"=>"Ocurrió un error inesperado",
+            "texto"=>"No se ha recibido el ID del gasto",
+            "icono"=>"error"
+        ];
+        return json_encode($alerta);
+    }
 }
 ?>
