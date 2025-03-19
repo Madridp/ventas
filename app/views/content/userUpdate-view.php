@@ -84,7 +84,9 @@
                         <option value="Administrador" <?php if($datos['usuario_cargo']=="Administrador"){ echo 'selected=""'; } ?> >Administrador <?php if($datos['usuario_cargo']=="Administrador"){ echo '(Actual)'; } ?></option>
 
                         <option value="Cajero" <?php if($datos['usuario_cargo']=="Cajero"){ echo 'selected=""'; } ?> >Cajero <?php if($datos['usuario_cargo']=="Cajero"){ echo '(Actual)'; } ?></option>
-				  	</select>
+
+						<option value="Encargado" <?php if($datos['usuario_cargo']=="Encargado"){ echo 'selected=""'; } ?> >Encargado <?php if($datos['usuario_cargo']=="Encargado"){ echo '(Actual)'; } ?></option>
+					</select>
 				</div>
 		  	</div>
 		  	<?php } ?>
