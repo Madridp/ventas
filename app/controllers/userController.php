@@ -149,7 +149,7 @@ class userController extends mainModel {
             }
 
             # Verificando cargo #
-            if($cargo!="Administrador" && $cargo!="Cajero"){
+            if($cargo!="Administrador" && $cargo!="Cajero" && $cargo!="Encargado"){
                 $alerta=[
                     "tipo"=>"simple",
                     "titulo"=>"Ocurrió un error inesperado",
@@ -772,7 +772,7 @@ class userController extends mainModel {
             }
 
             # Verificando cargo #
-            if($cargo!="Administrador" && $cargo!="Cajero"){
+            if($cargo!="Administrador" && $cargo!="Cajero" && $cargo!="Encargado"){
                 $alerta=[
                     "tipo"=>"simple",
                     "titulo"=>"Ocurrió un error inesperado",
